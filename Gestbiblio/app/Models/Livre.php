@@ -14,20 +14,23 @@ class Livre extends Model
         'annedition',
         'prix',
         'qtestock',
-        'couverture'
+        'couverture',
+        'specialite_id',
+        'editeur_id'
     ];
     public function editeur()
     {
-        return $this->belongsTo(Editeur::class);
+        return $this->belongsTo(Editeur::class,'specialite_id');
     }
     
     public function specialite()
     {
-        return $this->belongsTo(Specialite::class);
+        return $this->belongsTo(Specialite::class,'editeur_id');
     }
     
     public function auteurs()
     {
-        return $this->belongsToMany(Auteur::class);
+        return $this->belongsToMany(Auteur::class, 'livre_auteur', 'livre_id', 'auteur_id');
     }
 }
+

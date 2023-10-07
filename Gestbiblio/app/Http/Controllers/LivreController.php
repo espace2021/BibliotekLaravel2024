@@ -12,7 +12,14 @@ class LivreController extends Controller
      */
     public function index()
     {
-        $livres = Livre::with('editeurs','specialites','auteurs')->get()->toArray();
+        $livres = Livre::with('editeur','specialite','auteurs')->get()->toArray();
+        /*
+ (&) pour modifier directement chaque élément du tableau "$livres". 
+ Cela permet d'accéder à la relation "auteurs" pour chaque livre à l'intérieur de la boucle foreach.
+        */
+        foreach ($livres as &$livre) {
+               $auteurs = $livre['auteurs']; 
+        }
         return array_reverse($livres);  
 
     }
@@ -28,12 +35,17 @@ class LivreController extends Controller
             'annedition' => $request->input('annedition'),
             'prix' => $request->input('prix'),
             'qtestock' => $request->input('qtestock'),
-            'couverture' => $request->input('couverture')
-
+            'couverture' => $request->input('couverture'),
+            'specialite_id' => $request->input('specialite_id'),
+            'editeur_id' => $request->input('editeur_id')
             ]);
         $livre->save();
 
-        return response()->json('Livre créé !');
+                // On ajoute les auteurs associés au livre en utilisant attach
+                $auteurIds = $request->input('auteur_ids'); // On aura un champ "auteur_ids" dans le formulaire
+                $livre->auteurs()->attach($auteurIds);
+       
+                return response()->json('Livre créé !');
 
     }
 
