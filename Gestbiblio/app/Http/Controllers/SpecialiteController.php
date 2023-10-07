@@ -7,12 +7,14 @@ use Illuminate\Http\Request;
 
 class SpecialiteController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $specialites = Specialite::all()->toArray();
+        return array_reverse($specialites);  
+
     }
 
     /**
@@ -20,30 +22,46 @@ class SpecialiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $specialite = new Specialite([
+            'nomspecialite' => $request->input('nomspecialite')
+            ]);
+        $specialite->save();
+
+        return response()->json('Specialite créée !');
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Specialite $specialite)
+    public function show($id)
     {
-        //
+        $specialite= Specialite::find($id);
+        return response()->json($specialite);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Specialite $specialite)
+    public function update($id, Request $request)
     {
-        //
+        $specialite = Specialite::find($id);
+        $specialite->update($request->all());
+
+        return response()->json($specialite);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Specialite $specialite)
+    public function destroy($id)
     {
-        //
+        $specialite = Specialite::find($id);
+        $specialite->delete();
+
+        return response()->json(['message' => 'Specialite deleted successfully']);
+
     }
 }
