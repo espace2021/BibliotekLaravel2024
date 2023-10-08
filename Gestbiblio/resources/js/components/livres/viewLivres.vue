@@ -34,6 +34,7 @@
                   </div>
                 </td>
                 <td>
+                    <router-link :to="{name: 'editLivre', params: { id: l.id }}" class="btn btn-success">Edit</router-link>
                     <button @click.prevent="deleteLivre(l.id)" class="btn btn-danger">Supprimer</button></td>
             </tr>
             </tbody>

@@ -56,7 +56,12 @@ class LivreController extends Controller
      */
     public function show($id)
     {
-        $livre= Livre::find($id);
+        $livre = Livre::with('editeur', 'specialite', 'auteurs')->find($id);
+
+        if (!$livre) {
+            return response()->json(['message' => 'Livre introuvable'], 404);
+        }
+    
         return response()->json($livre);
 
     }
@@ -68,6 +73,13 @@ class LivreController extends Controller
     {
         $livre = Livre::find($id);
         $livre->update($request->all());
+
+         // supprimer l'enregistrement correspondant dans la table "livre_auteur"
+        DB::table('livre_auteur')->where('livre_id', $livre->id)->delete();
+
+        //puis le recréer
+        $auteurIds = $request->input('auteur_ids'); // On aura un champ "auteur_ids" dans le formulaire
+        $livre->auteurs()->attach($auteurIds);
 
         return response()->json($livre);
 
