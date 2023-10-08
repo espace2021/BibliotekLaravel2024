@@ -20,5 +20,9 @@ Route::middleware('api')->group(function () {
 });
 
 Route::middleware('api')->group(function () {
+    Route::resource('specialites', SpecialiteController::class);
+});
+
+Route::middleware('api')->group(function () {
     Route::resource('livres', LivreController::class);
 });

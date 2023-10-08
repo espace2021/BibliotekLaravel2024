@@ -20,12 +20,12 @@ class Livre extends Model
     ];
     public function editeur()
     {
-        return $this->belongsTo(Editeur::class,'specialite_id');
+        return $this->belongsTo(Editeur::class,'editeur_id');
     }
     
     public function specialite()
     {
-        return $this->belongsTo(Specialite::class,'editeur_id');
+        return $this->belongsTo(Specialite::class,'specialite_id');
     }
     
     public function auteurs()

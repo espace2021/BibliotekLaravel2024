@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Livre;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+
 class LivreController extends Controller
 {
     /**
@@ -75,11 +77,19 @@ class LivreController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        $livre = Livre::find($id);
-        $livre->delete();
+    { 
+  
+   $livre = Livre::find($id);
 
-        return response()->json(['message' => 'Livre deleted successfully']);
+   if (!$livre) {
+       return response()->json(['message' => 'Livre not found'], 404);
+   }
 
+   // Supprimer l'enregistrement correspondant dans la table "livre_auteur"
+   DB::table('livre_auteur')->where('livre_id', $livre->id)->delete();
+
+   $livre->delete();
+
+   return response()->json(['message' => 'Livre deleted successfully']);
     }
 }
