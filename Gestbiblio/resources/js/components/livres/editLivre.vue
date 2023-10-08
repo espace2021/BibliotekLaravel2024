@@ -109,7 +109,17 @@
       });
   }
   
-const livre = ref({});
+const livre = ref({
+    isbn: "",
+    titre: "",
+    annedition: "",
+    prix: "",
+    qtestock: "",
+    couverture: "",
+    specialite_id: "",
+    editeur_id : "",
+    auteur_ids:[]
+});
 
 const fetchLivre= async()=> {
   
@@ -117,8 +127,8 @@ const fetchLivre= async()=> {
                 .get(`/api/livres/${route.params.id}`)
                 .then((res) => {
                     livre.value = res.data;
-                    console.log(res.data)
-                       console.log("livre.value.auteurs:", livre.value.auteurs); 
+                     // Remplir livre.auteur_ids avec les ID des auteurs associés au livre
+                     livre.value.auteur_ids = res.data.auteurs.map((auteur) => auteur.id); 
                 })
                 .catch((err) => {console.error(err)})  
      
