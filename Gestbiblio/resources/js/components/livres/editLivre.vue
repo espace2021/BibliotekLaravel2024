@@ -29,7 +29,7 @@
        </div>
        <div class="form-group">
        Auteurs <select class="form-control" v-model="livre.auteur_ids" multiple>
-          <option v-for="aut in Auteurs" :key="aut.id" :value=aut.id :selected="livre.auteurs.includes(aut.id)">{{aut.nomauteur}}</option>
+          <option v-for="aut in Auteurs" :key="aut.id" :value=aut.id :class="{ optionExist: selectOne(aut.id) }">{{aut.nomauteur}}</option>
        </select>  
        </div>
         <!-- FilePond pour le téléchargement d'images -->
@@ -118,7 +118,7 @@ const fetchLivre= async()=> {
                 .then((res) => {
                     livre.value = res.data;
                     console.log(res.data)
-                       
+                       console.log("livre.value.auteurs:", livre.value.auteurs); 
                 })
                 .catch((err) => {console.error(err)})  
      
@@ -194,4 +194,22 @@ let  myFiles = ref([]);
             })
 }
 
+const selectOne = (autId) => {
+  if (livre.value.auteurs) {
+    /* some renvoie vrai si, dans le tableau, 
+    il trouve un élément pour lequel la fonction fournie renvoie vrai ; 
+    sinon, il renvoie faux.
+    */
+    return livre.value.auteurs.some((auteur) => auteur.id === autId);
+  } else {
+    return false; 
+  }
+};
+
+
   </script>
+<style scoped>
+.optionExist {
+  background-color: yellow; 
+}
+</style>
